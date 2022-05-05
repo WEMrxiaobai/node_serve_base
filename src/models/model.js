@@ -13,8 +13,6 @@ function getIPAdress() {
         }
     }
 }
-
-
 module.exports = {
     getIPAdress
 }

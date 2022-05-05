@@ -4,15 +4,16 @@ const { MYSQL_CONFIG } = require('../config/db');
 var conn = mysql.createConnection(MYSQL_CONFIG);
 // 开始连接  
 conn.connect();
-console.log("connect mysql");
+console.log("[connect] connect mysql");
 // 重新连接
 function Reconn() {
     conn.on('error', err => {
-        console.log("err ", err, new Date());
+        console.log("[connect] err ", err, new Date());
         conn = mysql.createConnection(MYSQL_CONFIG);
         setTimeout(() => {
             Reconn()
-        }, 2000);
+            console.log('[connect] 重新连接 mysql');
+        }, 1000);
     })
 }
 Reconn();
@@ -35,7 +36,7 @@ function execSQL(sql) {
         })
     }).catch(() => {
         // 对catch处理
-        console.log("执行sql 错误 errorMsg", errorMsg);
+        console.log("[sql] 执行sql 错误 errorMsg", errorMsg);
         return errorMsg;
     })
 }

@@ -44,5 +44,5 @@ app.use(function (err, req, res, next) {
 
 // 启动服务器
 app.listen(port, () => {
-    console.log(`服务启动  访问地址: http://${getIPAdress()}:${port}`);
+    console.log(`[serve] 服务启动 访问地址: http://${getIPAdress()}:${port}`);
 })

@@ -1,22 +1,41 @@
 const mysql = require('mysql');
 const { MYSQL_CONFIG } = require('../config/db');
-//创建连接对象  
-var conn = mysql.createConnection(MYSQL_CONFIG);
+console.log("[connect] enter connect mysql" , new Date());
+var conn
 // 开始连接  
-conn.connect();
-console.log("[connect] connect mysql");
-// 重新连接
-function Reconn() {
+function connect() {
+    //创建连接对象  
+    conn = mysql.createConnection(MYSQL_CONFIG);
+    // 开启连接
+    conn.connect();
+    // console.log("------------conn0------------------",conn);
     conn.on('error', err => {
-        console.log("[connect] err ", err, new Date());
-        conn = mysql.createConnection(MYSQL_CONFIG);
-        setTimeout(() => {
-            Reconn()
-            console.log('[connect] 重新连接 mysql');
-        }, 1000);
+        console.log("[connect] 断开链接 err ", err, new Date());
+        // console.log("--------conn1-----------------------",conn);
+        Reconn();
     })
 }
-Reconn();
+connect()
+
+// 重新连接
+function Reconn() {
+    try {
+        console.log("[connect] 尝试重连 " , new Date());
+        setTimeout(() => {
+            conn = mysql.createConnection(MYSQL_CONFIG);
+            conn.connect();
+            console.log('[connect] 已重新连接 mysql' , new Date());
+            conn.on('error', err => {
+                console.log("[connect] 断开链接 err ", err, new Date());
+                Reconn();
+            })
+        }, 1000);
+    } catch (error) {
+        console.log('[connect]  Reconn error ', error , new Date());
+    }
+
+}
+
 let errorMsg
 function execSQL(sql) {
     return new Promise((resolve, reject) => {

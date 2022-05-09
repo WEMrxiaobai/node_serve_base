@@ -1,10 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET users listing. */
+/**
+ * 用户方法
+ */
 router.get('/', function(req, res, next) {
-
-  res.send('enter users');
+  res.send(await apiController.selectVideoID(req))
+});
+router.get('/selectID',async function (req, res, next) {
+  res.send(await apiController.selectVideoID(req))
 });
 
 module.exports = router;
